@@ -1,33 +1,31 @@
 package com.github.thiagodutra.coopvoteservice.domain.dto;
 
 
-import java.time.LocalDateTime;
 import java.util.Set;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 import com.github.thiagodutra.coopvoteservice.domain.entities.Agenda;
-import com.github.thiagodutra.coopvoteservice.domain.entities.VotingSession;
-
-import org.springframework.lang.NonNull;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
 public class AgendaDTO {
 
+    @Getter
     private Long id;
-    @NonNull
+    @Getter
     @NotBlank
+    @Size(max = 50)
     private String name;
-    private LocalDateTime createdIn;
-    private Set<VotingSession> votingSession;
+    @Getter
+    private Set<VotingSessionDTO> votingSession;
 
-    public Agenda mapToEntity() throws Exception {
+    public Agenda mapToEntity() {
         return new Agenda(this.id, this.name);
     }
 }

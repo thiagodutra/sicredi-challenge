@@ -1,12 +1,17 @@
 package com.github.thiagodutra.coopvoteservice.api.controllers;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import com.github.thiagodutra.coopvoteservice.domain.dto.AgendaDTO;
+import com.github.thiagodutra.coopvoteservice.domain.response.DefaultErrorResponse;
 import com.github.thiagodutra.coopvoteservice.domain.service.AgendaService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,12 +19,27 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@Validated
 @RestController
 @RequestMapping("/cooperativa/agenda")
 public class AgendaController {
     
     @Autowired
     AgendaService agendaService;
+
+    @ExceptionHandler(Exception.class)
+    ResponseEntity<DefaultErrorResponse> handleException(Exception exception) {
+        //TODO transform this in a method
+        if (exception instanceof NoSuchElementException) {
+            return new ResponseEntity<>(
+                new DefaultErrorResponse(
+                    "getAgendaByID",
+                    "Element not found with the given id", 
+                    "more details"), 
+                HttpStatus.NOT_FOUND);
+        }
+        return null;
+    }
 
     @GetMapping
     public ResponseEntity<List<AgendaDTO>> getAllAgenda() {

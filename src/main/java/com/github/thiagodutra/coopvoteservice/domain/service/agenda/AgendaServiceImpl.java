@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.github.thiagodutra.coopvoteservice.domain.dto.AgendaDTO;
-import com.github.thiagodutra.coopvoteservice.domain.entities.Agenda;
 import com.github.thiagodutra.coopvoteservice.domain.repository.AgendaRepository;
 import com.github.thiagodutra.coopvoteservice.domain.service.AgendaService;
 
@@ -22,7 +21,7 @@ public class AgendaServiceImpl implements AgendaService {
     public List<AgendaDTO> getAllAgenda() {
         return agendaRepository.findAll().stream()
             .map(agenda -> 
-                new AgendaDTO(agenda.getId(), agenda.getName(), agenda.getCreatedIn(), agenda.getVotingSession()))
+                new AgendaDTO(agenda.getId(), agenda.getName(), agenda.getVotingSession()))
             .collect(Collectors.toList());
     }
 
@@ -30,14 +29,13 @@ public class AgendaServiceImpl implements AgendaService {
     public AgendaDTO getAgendaById(Long id) throws Exception {
         return agendaRepository.findById(id)
         .map(agenda -> 
-            new AgendaDTO(agenda.getId(), agenda.getName(), agenda.getCreatedIn(), null))
+            new AgendaDTO(agenda.getId(), agenda.getName(), agenda.getVotingSession()))
         .orElseThrow(() -> new Exception(""));
     }
 
     @Override
-    public Long createAgenda(AgendaDTO newAgenda) throws Exception {
-        final Agenda agenda = newAgenda.mapToEntity();
-        return agendaRepository.save(agenda).getId();
+    public Long createAgenda(AgendaDTO newAgenda) {
+        return agendaRepository.save(newAgenda.mapToEntity()).getId();
     }
 
     @Override

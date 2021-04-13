@@ -1,6 +1,5 @@
 package com.github.thiagodutra.coopvoteservice.domain.entities;
 
-import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -11,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.NotBlank;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -27,29 +27,20 @@ public class Agenda {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank
     @NonNull
     @Column(name = "name", length = 50)
     private String name;
 
-    @NonNull
-    @Column(name = "created_in")
-    private LocalDateTime createdIn;
-
     @OneToMany(fetch = FetchType.EAGER)
-    private Set<VotingSession> votingSession = new HashSet<VotingSession>();
+    private Set<VotingSession> votingSession = new HashSet<>();
 
-    public Agenda (Long id, String name) throws Exception {
-        validateName(name);
-        this.id = id;
-        this.createdIn = LocalDateTime.now();
+    public Agenda (String name) {
         this.name = name;
     }
 
-    //TODO DEFINE AND THROW A CUSTOM EXCPETION INSTEAD OF A GENERIC ONE
-    private void validateName(String name) throws Exception {
-        if (name.isEmpty() || name.isBlank()) {
-            throw new Exception(String.format("Attribute %s is mandatory", "name"));
-        }
+    public Agenda (Long id, String name) {
+        this.id = id;
+        this.name = name;
     }
-
 }
