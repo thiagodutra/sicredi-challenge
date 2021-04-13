@@ -1,6 +1,6 @@
-package com.github.thiagodutra.domain.repository;
+package com.github.thiagodutra.coopvoteservice.domain.repository;
 
-import com.github.thiagodutra.domain.entities.Agenda;
+import com.github.thiagodutra.coopvoteservice.domain.entities.Agenda;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

@@ -1,0 +1,31 @@
+version: '3.5'
+
+volumes:
+  mysql-db:
+
+services:
+  mysql:
+    image: mysql:latest
+    container_name: mysql-server-sicredi
+    environment:
+      MYSQL_DATABASE: 'sicredi'
+      MYSQL_USER: 'sicred1'
+      MYSQL_PASSWORD: 'vote@sicr3di'
+      MYSQL_ROOT_PASSWORD: 'vote@sicr3di'
+    ports:
+      - "3306:3306"
+    networks:
+      - coop-vote-service-network
+    volumes:
+      - mysql-db:/var/lib/mysql
+  
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8081:8080
+    networks:
+      - coop-vote-service-network
+
+networks:
+  coop-vote-service-network:

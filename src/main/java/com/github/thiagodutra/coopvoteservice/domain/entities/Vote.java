@@ -1,5 +1,6 @@
-package com.github.thiagodutra.domain.entities;
+package com.github.thiagodutra.coopvoteservice.domain.entities;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -9,20 +10,19 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
+@Data
+@Entity(name = "tb_vote")
 public class Vote {
-
-    // To use the @Data annotation you should add the Lombok dependency.
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true)
     private String cpf;
 
+    @Column(nullable = false)
     private String vote;
 
 }
