@@ -25,4 +25,8 @@ public class Vote {
     @Column(nullable = false)
     private String vote;
 
+    // public VoteDTO mapToDTO() {
+    //     return new VoteDTO(this.getId(), this.getCpf(), this.getVote());
+    // }
+
 }
