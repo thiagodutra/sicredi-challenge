@@ -1,7 +1,7 @@
 package com.github.thiagodutra.coopvoteservice.domain.dto;
 
 
-import java.util.Set;
+import java.util.List;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -14,18 +14,18 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
 public class AgendaDTO {
 
-    @Getter
+
     private Long id;
-    @Getter
     @NotBlank
     @Size(max = 50)
     private String name;
-    @Getter
-    private Set<VotingSessionDTO> votingSession;
+    
+    private List<VotingSessionDTO> votingSession;
 
-    public Agenda mapToEntity() {
-        return new Agenda(this.id, this.name);
+    public Agenda mapToEntity(){
+        return new Agenda(this.getName());
     }
 }

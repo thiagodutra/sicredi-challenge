@@ -29,7 +29,7 @@ public class AgendaController {
 
     @ExceptionHandler(Exception.class)
     ResponseEntity<DefaultErrorResponse> handleException(Exception exception) {
-        //TODO transform this in a method
+        //TODO Refactor this and transform this in a method
         if (exception instanceof NoSuchElementException) {
             return new ResponseEntity<>(
                 new DefaultErrorResponse(

@@ -9,5 +9,5 @@ public interface AgendaService {
     List<AgendaDTO> getAllAgenda();
     AgendaDTO getAgendaById(Long id) throws Exception;
     Long createAgenda(AgendaDTO newAgenda) throws Exception;
-    void getAgendaVotingSession(Long id);
+    void getAgendaVotingSessions(Long id);
 }

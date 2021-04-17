@@ -5,6 +5,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+
+import com.github.thiagodutra.coopvoteservice.domain.dto.VoteDTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -25,8 +29,24 @@ public class Vote {
     @Column(nullable = false)
     private String vote;
 
-    // public VoteDTO mapToDTO() {
-    //     return new VoteDTO(this.getId(), this.getCpf(), this.getVote());
+    @ManyToOne
+    @JoinColumn(name = "voting_session_id", nullable = false)
+    private VotingSession votingSession;
+
+
+    public Vote(String cpf, String vote) {
+        this.vote = vote;
+        this.cpf = cpf;
+    }
+
+    // public List<VoteDTO> voteEntityCollectionToDTO(List<Vote> votes) {
+    //     return votes.stream().map(vote -> mapToDTO(vote))
+    //     .collect(Collectors.toList());
     // }
+
+    
+    public VoteDTO mapToDTO(Vote vote) {
+        return new VoteDTO(vote.getId(), vote.getCpf(), vote.getVote());
+    }
 
 }
