@@ -1,11 +1,14 @@
 package com.github.thiagodutra.coopvoteservice.domain.service.agenda;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.github.thiagodutra.coopvoteservice.domain.dto.AgendaDTO;
+import com.github.thiagodutra.coopvoteservice.domain.dto.VotingSessionDTO;
 import com.github.thiagodutra.coopvoteservice.domain.entities.Agenda;
+import com.github.thiagodutra.coopvoteservice.domain.entities.VotingSession;
 import com.github.thiagodutra.coopvoteservice.domain.repository.AgendaRepository;
 import com.github.thiagodutra.coopvoteservice.domain.service.AgendaService;
 import com.github.thiagodutra.coopvoteservice.domain.service.VotingSessionService;
@@ -43,8 +46,16 @@ public class AgendaServiceImpl implements AgendaService {
     }
 
     @Override
-    public void getAgendaVotingSessions(Long id) {
-        String a = "b"; 
+    public AgendaDTO createVotingSession(Long agendaId, VotingSessionDTO votingSession) {
+        Optional<Agenda> agendaOptional = agendaRepository.findById(agendaId);
+        if (agendaOptional.isPresent()) {
+            VotingSession votingSessionFromDto = votingSession.mapToEntity();
+            agendaOptional.get().getVotingSession().add(votingSessionFromDto);
+            return agendaRepository.save(agendaOptional.get()).mapToDTO();
+             
+        }
+        throw new NoSuchElementException("Agenda not found");
+        //TODO Throw Not found Exception
     }
 
 }

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 import com.github.thiagodutra.coopvoteservice.domain.dto.AgendaDTO;
+import com.github.thiagodutra.coopvoteservice.domain.dto.VotingSessionDTO;
 import com.github.thiagodutra.coopvoteservice.domain.response.DefaultErrorResponse;
 import com.github.thiagodutra.coopvoteservice.domain.service.AgendaService;
 
@@ -21,7 +22,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Validated
 @RestController
-@RequestMapping("/cooperativa/agenda")
+//TODO Transform /v1/coop in a constant
+@RequestMapping("/v1/coop/agenda")
 public class AgendaController {
     
     @Autowired
@@ -70,4 +72,8 @@ public class AgendaController {
         }
     }
 
+    @PostMapping("/{agendaId}/create-votingsession")
+        public ResponseEntity<VotingSessionDTO> createSession(@PathVariable Long agendaId, @RequestBody VotingSessionDTO votingSession) {
+            return ResponseEntity.ok(votingSession);
+        }
 }
