@@ -1,14 +1,18 @@
 package com.github.thiagodutra.coopvoteservice.domain.entities;
 
+import java.time.LocalDateTime;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 import com.github.thiagodutra.coopvoteservice.domain.dto.VoteDTO;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,30 +27,35 @@ public class Vote {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true)
+    @Column(name = "document", unique = true)
     private String cpf;
 
     @Column(nullable = false)
     private String vote;
 
-    @ManyToOne
-    @JoinColumn(name = "voting_session_id", nullable = false)
+    @DateTimeFormat(iso = DateTimeFormat.ISO.TIME)
+    @Column(nullable = false)
+    private LocalDateTime timeOfVote;
+
+    @OneToOne
+    @JoinColumn(name = "voting_session_id")
     private VotingSession votingSession;
 
-
+    
     public Vote(String cpf, String vote) {
         this.vote = vote;
         this.cpf = cpf;
+        this.timeOfVote = LocalDateTime.now();
     }
 
-    // public List<VoteDTO> voteEntityCollectionToDTO(List<Vote> votes) {
-    //     return votes.stream().map(vote -> mapToDTO(vote))
-    //     .collect(Collectors.toList());
-    // }
-
+    public Vote(String cpf, String vote, VotingSession votingSession) {
+        this.vote = vote;
+        this.cpf = cpf;
+        this.votingSession = votingSession;
+        this.timeOfVote = LocalDateTime.now();
+    }
     
-    public VoteDTO mapToDTO(Vote vote) {
-        return new VoteDTO(vote.getId(), vote.getCpf(), vote.getVote());
+    public VoteDTO mapToDTO() {
+        return new VoteDTO(this.getId(), this.getCpf());
     }
-
 }

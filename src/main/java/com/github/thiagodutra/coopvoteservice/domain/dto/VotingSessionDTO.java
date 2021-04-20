@@ -1,7 +1,5 @@
 package com.github.thiagodutra.coopvoteservice.domain.dto;
 
-import java.util.List;
-
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
@@ -25,12 +23,9 @@ public class VotingSessionDTO {
     @Size(max=50)
     private String topicName;
     private Long votingDurationInMinutes;
-    private List<VoteDTO> votes;
 
     
     public VotingSession mapToEntity() {
-        return new VotingSession(this.getTopicName(), this.getVotingDurationInMinutes());
+        return new VotingSession(this.getTopicName(), this.votingDurationInMinutes);
     }
-
-    
 }

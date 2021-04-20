@@ -9,6 +9,6 @@ public interface AgendaService {
 
     List<AgendaDTO> getAllAgenda();
     AgendaDTO getAgendaById(Long id);
-    Long createAgenda(AgendaDTO newAgenda);
+    AgendaDTO createAgenda(AgendaDTO newAgenda);
     AgendaDTO createVotingSession(Long agendaId, VotingSessionDTO votingSession);
 }

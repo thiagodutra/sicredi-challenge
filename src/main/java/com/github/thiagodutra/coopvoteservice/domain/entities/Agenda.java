@@ -1,17 +1,13 @@
 package com.github.thiagodutra.coopvoteservice.domain.entities;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.validation.constraints.NotBlank;
 
 import com.github.thiagodutra.coopvoteservice.domain.dto.AgendaDTO;
@@ -37,24 +33,21 @@ public class Agenda {
     @Column(name = "name", length = 50)
     private String name;
 
-    @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER, mappedBy = "agenda")
-    private List<VotingSession> votingSession = new ArrayList<>();
+    @OneToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "voting_session_id")
+    private VotingSession votingSession;
 
     public Agenda (String name) {
         this.name = name;
     }
 
-    public Agenda (String name, List<VotingSession> votingSessions) {
+    public Agenda (String name, VotingSession votingSession) {
         this.name = name;
-        this.votingSession = votingSessions;
+        this.votingSession = votingSession;
     }
 
     public AgendaDTO mapToDTO() {
-        return new AgendaDTO(this.getId(), this.getName(), votingSessionToDTO(this.getVotingSession()));
+        VotingSessionDTO votingSession = this.getVotingSession() != null ? this.getVotingSession().mapToDTO() : null;
+        return new AgendaDTO(this.getId(), this.getName(), votingSession);
     }
-
-    private List<VotingSessionDTO> votingSessionToDTO (List<VotingSession> votingSessions) {
-        return votingSessions.stream().map(VotingSession::mapToDTO).collect(Collectors.toList());
-    }
-
 }

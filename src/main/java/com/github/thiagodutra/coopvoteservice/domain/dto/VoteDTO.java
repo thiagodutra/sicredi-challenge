@@ -22,6 +22,11 @@ public class VoteDTO{
     @NotBlank
     private String vote;
 
+    public VoteDTO(Long id, String cpf){
+        this.id = id;
+        this.cpf = cpf;
+    }
+
     public Vote mapToEntity(){
         return new Vote(this.getCpf(), this.getVote());
     }

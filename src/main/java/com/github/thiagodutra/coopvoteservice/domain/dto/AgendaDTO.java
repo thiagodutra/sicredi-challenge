@@ -1,8 +1,6 @@
 package com.github.thiagodutra.coopvoteservice.domain.dto;
 
 
-import java.util.List;
-
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
@@ -23,7 +21,7 @@ public class AgendaDTO {
     @Size(max = 50)
     private String name;
     
-    private List<VotingSessionDTO> votingSession;
+    private VotingSessionDTO votingSession;
 
     public Agenda mapToEntity(){
         return new Agenda(this.getName());

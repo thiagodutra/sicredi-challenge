@@ -7,6 +7,7 @@ import com.github.thiagodutra.coopvoteservice.domain.dto.AgendaDTO;
 import com.github.thiagodutra.coopvoteservice.domain.dto.VotingSessionDTO;
 import com.github.thiagodutra.coopvoteservice.domain.response.DefaultErrorResponse;
 import com.github.thiagodutra.coopvoteservice.domain.service.AgendaService;
+import com.github.thiagodutra.coopvoteservice.domain.service.VotingSessionService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,58 +23,40 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Validated
 @RestController
-//TODO Transform /v1/coop in a constant
-@RequestMapping("/v1/coop/agenda")
+// TODO Transform /v1/coop in a constant
+@RequestMapping("/coop/v1/agenda")
 public class AgendaController {
-    
+
     @Autowired
     AgendaService agendaService;
+    @Autowired
+    VotingSessionService votingSessionService;
 
-    @ExceptionHandler(Exception.class)
-    ResponseEntity<DefaultErrorResponse> handleException(Exception exception) {
-        //TODO Refactor this and transform this in a method
-        if (exception instanceof NoSuchElementException) {
-            return new ResponseEntity<>(
-                new DefaultErrorResponse(
-                    "getAgendaByID",
-                    "Element not found with the given id", 
-                    "more details"), 
+    @ExceptionHandler(NoSuchElementException.class)
+    ResponseEntity<DefaultErrorResponse> handleException(NoSuchElementException exception) {
+        return new ResponseEntity<>(
+                new DefaultErrorResponse("Agenda", "Cannot find the element with the given id", exception.getMessage()),
                 HttpStatus.NOT_FOUND);
-        }
-        return null;
     }
 
     @GetMapping
     public ResponseEntity<List<AgendaDTO>> getAllAgenda() {
-        try {
-            return ResponseEntity.ok(agendaService.getAllAgenda());
-        } catch (Exception e ){
-            return ResponseEntity.badRequest().build();
-        }
+        return ResponseEntity.ok(agendaService.getAllAgenda());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<AgendaDTO> getAgendaById(@PathVariable Long id) {
-        AgendaDTO agenda = new AgendaDTO();
-        try {
-            agenda = agendaService.getAgendaById(id);
-            return ResponseEntity.ok(agenda);
-        } catch (Exception e ){
-            return ResponseEntity.badRequest().build();
-        }
+        return ResponseEntity.ok(agendaService.getAgendaById(id));
     }
 
     @PostMapping
-    public ResponseEntity<Long> createAgenda(@RequestBody final AgendaDTO agenda){
-        try {
-            return ResponseEntity.ok(agendaService.createAgenda(agenda));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
-        }
+    public ResponseEntity<AgendaDTO> createAgenda(@RequestBody final AgendaDTO agenda) {
+        return ResponseEntity.ok(agendaService.createAgenda(agenda));
     }
 
-    @PostMapping("/{agendaId}/create-votingsession")
-        public ResponseEntity<VotingSessionDTO> createSession(@PathVariable Long agendaId, @RequestBody VotingSessionDTO votingSession) {
-            return ResponseEntity.ok(votingSession);
-        }
+    @PostMapping("/{agendaId}/create-session")
+    public ResponseEntity<AgendaDTO> createSession(@PathVariable Long agendaId,
+            @RequestBody VotingSessionDTO votingSession) {
+        return ResponseEntity.ok(agendaService.createVotingSession(agendaId, votingSession));
+    }
 }
