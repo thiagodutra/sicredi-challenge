@@ -2,7 +2,6 @@ package com.github.thiagodutra.coopvoteservice.domain.entities;
 
 import java.time.LocalDateTime;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -38,7 +37,7 @@ public class Vote {
     @Column(nullable = false)
     private LocalDateTime timeOfVote;
 
-    @OneToOne(cascade = CascadeType.PERSIST)
+    @OneToOne()
     @JoinColumn(name = "voting_session_id")
     private VotingSession votingSession;
 

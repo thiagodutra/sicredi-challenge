@@ -30,13 +30,13 @@ public class VoteServiceImpl implements VoteService {
     DocumentService documentService;
 
     @Override
-    public VoteDTO processVote(Long voteSessionId, VoteDTO voteDto){
+    public Vote processVote(Long voteSessionId, VoteDTO voteDto){
         log.info("Starting to process user's vote...");
         Vote vote = voteDto.mapToEntity();
-        VotingSession votingSession = votingSessionService.findById(voteSessionId).mapToEntity();
+        VotingSession votingSession = votingSessionService.findById(voteSessionId);
         validateIfSessionIsOpen(vote, votingSession);
         if (userCanVote(vote.getCpf())) {
-            return computeVote(voteDto.mapToEntity(), votingSession).mapToDTO();
+            return computeVote(voteDto.mapToEntity(), votingSession);
         }
         log.error("Something wrong occurred during vote processing");
         throw new VoteNotSupportedException(ApplicationMessages.SOMETHING_WEIRD_OCCURRED);       

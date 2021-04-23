@@ -24,9 +24,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.annotations.ApiOperation;
+
 @RestController
-// TODO Transform /v1/coop in a constant
-@RequestMapping("/coop/v1/agenda")
+@RequestMapping("/api/v1")
 public class AgendaController {
 
     @Autowired
@@ -48,24 +49,25 @@ public class AgendaController {
                 HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping
+    @ApiOperation(value = "Method to retrieve All Agendas in Database", response = AgendaDTO.class)
+    @GetMapping("/agenda")
     public ResponseEntity<List<AgendaDTO>> getAllAgenda() {
         return ResponseEntity.ok(agendaService.getAllAgenda());
     }
-
-    @GetMapping("/{id}")
+    @ApiOperation(value = "Method to retrieve one Agenda by its ID", response = AgendaDTO.class)
+    @GetMapping("/agenda/{id}")
     public ResponseEntity<AgendaDTO> getAgendaById(@PathVariable @Min(1) Long id) {
-        return ResponseEntity.ok(agendaService.getAgendaById(id));
+        return ResponseEntity.ok(agendaService.getAgendaById(id).mapToDTO());
     }
-
-    @PostMapping
+    @ApiOperation(value = "Method to create an Agenda", response = AgendaDTO.class)
+    @PostMapping("/agenda")
     public ResponseEntity<AgendaDTO> createAgenda(@Valid @RequestBody final AgendaDTO agenda) {
-        return ResponseEntity.ok(agendaService.createAgenda(agenda));
+        return ResponseEntity.ok(agendaService.createAgenda(agenda).mapToDTO());
     }
-
-    @PostMapping("/{agendaId}/create-session")
+    @ApiOperation(value = "Method to create a Voting Session related to one Agenda", response = AgendaDTO.class)
+    @PostMapping("/agenda/{agendaId}/create-session")
     public ResponseEntity<AgendaDTO> createSession(@PathVariable @Min(1) Long agendaId,
     @Valid @RequestBody VotingSessionDTO votingSession) {
-        return ResponseEntity.ok(agendaService.createVotingSession(agendaId, votingSession));
+        return ResponseEntity.ok(agendaService.createVotingSession(agendaId, votingSession).mapToDTO());
     }
 }

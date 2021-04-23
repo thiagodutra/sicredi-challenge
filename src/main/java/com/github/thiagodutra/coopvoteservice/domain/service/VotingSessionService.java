@@ -8,8 +8,8 @@ import com.github.thiagodutra.coopvoteservice.domain.entities.VotingSession;
 
 public interface VotingSessionService {
 
-    VotingSessionDTO save(VotingSessionDTO votingSessionDTO);
-    VotingSessionDTO findById(Long id);
-    List<VotingSession> findClosedSessions(LocalDateTime actualTime);
+    VotingSession save(VotingSessionDTO votingSessionDTO);
+    VotingSession findById(Long id);
+    List<VotingSession> findClosedSessionsToProcess(LocalDateTime actualTime);
 
 }

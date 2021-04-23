@@ -38,24 +38,23 @@ public class AgendaServiceImpl implements AgendaService {
     }
 
     @Override
-    public AgendaDTO getAgendaById(Long id) {
+    public Agenda getAgendaById(Long id) {
         log.info("Retrieving agenda...");
         log.debug(String.format("Trying to retrieve agenda with id:%s", id.toString()));
         return agendaRepository.findById(id)
-        .map(Agenda::mapToDTO)
         .orElseThrow(() -> new NoSuchElementException(ApplicationMessages.AGENDA_DOES_NOT_EXISTS));
     }
 
     @Override
-    public AgendaDTO createAgenda(AgendaDTO newAgenda) {
+    public Agenda createAgenda(AgendaDTO newAgenda) {
         log.info("Creating agenda...");
         log.debug(String.format("Creating agenda. name:%s ", newAgenda.getName()));
         Agenda agenda = newAgenda.mapToEntity();
-        return agendaRepository.save(agenda).mapToDTO();
+        return agendaRepository.save(agenda);
     }
 
     @Override
-    public AgendaDTO createVotingSession(Long agendaId, VotingSessionDTO votingSession) {
+    public Agenda createVotingSession(Long agendaId, VotingSessionDTO votingSession) {
         log.info("Creating agenda's voting session");
         log.debug(String.format("Creating voting session: %n Retrieving corresponding Agenda"));
         Optional<Agenda> agendaOptional = agendaRepository.findById(agendaId);
@@ -66,7 +65,7 @@ public class AgendaServiceImpl implements AgendaService {
             votingSessionFromDto.setAlreadyProcessed(Boolean.FALSE);
             agenda.setVotingSession(votingSessionFromDto);
             log.debug("Created relation between Agenda and Voting Session.");
-            return agendaRepository.save(agenda).mapToDTO();
+            return agendaRepository.save(agenda);
         }
         log.error(String.format("Agenda with the given id: %s was not found.", agendaId.toString()));
         throw new NoSuchElementException(ApplicationMessages.AGENDA_DOES_NOT_EXISTS);

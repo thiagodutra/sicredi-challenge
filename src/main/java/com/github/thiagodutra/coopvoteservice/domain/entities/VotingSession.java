@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 import com.github.thiagodutra.coopvoteservice.domain.dto.VotingSessionDTO;
 
@@ -18,7 +19,8 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @Data
-@Entity(name = "tb_voting_session")
+@Entity
+@Table(name="tb_voting_session")
 public class VotingSession {
 
     private static final Long DEFAULT_VOTING_DURATION = 1l;

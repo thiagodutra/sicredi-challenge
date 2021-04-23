@@ -17,8 +17,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.annotations.ApiOperation;
+
 @RestController
-@RequestMapping("/coop/v1/vote")
+@RequestMapping("/api/v1")
 public class VoteController {
 
     @Autowired
@@ -45,8 +47,9 @@ public class VoteController {
                 HttpStatus.BAD_REQUEST);
     }
 
-    @PostMapping("/session/{sessionId}/vote")
+    @ApiOperation(value = "Method to Vote in a VotingSession topic", response = VoteDTO.class)
+    @PostMapping("/vote/{sessionId}")
     public VoteDTO vote(@PathVariable Long sessionId, @RequestBody VoteDTO voteDto) throws Exception {
-        return voteService.processVote(sessionId, voteDto);
+        return voteService.processVote(sessionId, voteDto).mapToDTO();
     }
 }

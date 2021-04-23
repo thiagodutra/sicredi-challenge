@@ -23,22 +23,22 @@ public class VotingSessionServiceImpl implements VotingSessionService{
     VotingSessionRepository votingSessionRepository;
 
     @Override
-    public VotingSessionDTO save(VotingSessionDTO votingSessionDTO) {
+    public VotingSession save(VotingSessionDTO votingSessionDTO) {
         log.info("Sabing voting session.");
         VotingSession votingSession = votingSessionDTO.mapToEntity();
         log.debug("Saving voting session: " + votingSession.toString());
-        return votingSessionRepository.save(votingSession).mapToDTO(); 
+        return votingSessionRepository.save(votingSession); 
     }
 
     @Override
-    public VotingSessionDTO findById(Long id){
+    public VotingSession findById(Long id){
         log.debug(String.format("Trying to retrieve VotingSession with ID:%s", id.toString()));
-        return votingSessionRepository.findById(id).map(VotingSession::mapToDTO)
-        .orElseThrow(() -> new NoSuchElementException(ApplicationMessages.VOTING_SESSION_DOES_NOT_EXISTS));        
+        return votingSessionRepository.findById(id)
+            .orElseThrow(() -> new NoSuchElementException(ApplicationMessages.AGENDA_DOES_NOT_EXISTS));     
     }
 
     @Override
-    public List<VotingSession> findClosedSessions(final LocalDateTime actualTime) {
-        return votingSessionRepository.findAllByEndingVotingTimeGreaterThanAndStatusEquals(actualTime, Boolean.FALSE);
+    public List<VotingSession> findClosedSessionsToProcess(final LocalDateTime actualTime) {
+        return votingSessionRepository.findByAlreadyProcessedFalseAndEndingVoteTimeLessThan(actualTime);
     }
 }
