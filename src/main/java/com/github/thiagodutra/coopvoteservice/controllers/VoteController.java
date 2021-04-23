@@ -1,4 +1,4 @@
-package com.github.thiagodutra.coopvoteservice.api.controllers;
+package com.github.thiagodutra.coopvoteservice.controllers;
 
 import com.github.thiagodutra.coopvoteservice.domain.dto.VoteDTO;
 import com.github.thiagodutra.coopvoteservice.domain.exceptions.ClosedVotingSessionException;

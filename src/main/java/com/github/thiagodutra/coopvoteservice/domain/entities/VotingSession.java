@@ -36,6 +36,9 @@ public class VotingSession {
     
     private Long votingDurationInMinutes;
 
+    @Column(name="already_processed")
+    private Boolean alreadyProcessed;
+
     @OneToOne(mappedBy = "votingSession")
     private Agenda agenda;
 
@@ -47,7 +50,7 @@ public class VotingSession {
     }
 
     private LocalDateTime calculateEndingVotingTime(Long votingDurationInMinutes) {
-        return LocalDateTime.now().plusMinutes(votingDurationInMinutes);
+        return getStartingVoteTime().plusMinutes(votingDurationInMinutes);
     }
 
     public VotingSessionDTO mapToDTO(){

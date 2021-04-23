@@ -1,5 +1,7 @@
 package com.github.thiagodutra.coopvoteservice.domain.service.votingsession;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 import com.github.thiagodutra.coopvoteservice.domain.dto.VotingSessionDTO;
@@ -33,5 +35,10 @@ public class VotingSessionServiceImpl implements VotingSessionService{
         log.debug(String.format("Trying to retrieve VotingSession with ID:%s", id.toString()));
         return votingSessionRepository.findById(id).map(VotingSession::mapToDTO)
         .orElseThrow(() -> new NoSuchElementException(ApplicationMessages.VOTING_SESSION_DOES_NOT_EXISTS));        
+    }
+
+    @Override
+    public List<VotingSession> findClosedSessions(final LocalDateTime actualTime) {
+        return votingSessionRepository.findAllByEndingVotingTimeGreaterThanAndStatusEquals(actualTime, Boolean.FALSE);
     }
 }

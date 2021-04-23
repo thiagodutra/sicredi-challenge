@@ -47,7 +47,7 @@ public class Agenda {
     }
 
     public AgendaDTO mapToDTO() {
-        VotingSessionDTO votingSession = this.getVotingSession() != null ? this.getVotingSession().mapToDTO() : null;
-        return new AgendaDTO(this.getId(), this.getName(), votingSession);
+        VotingSessionDTO votingSessionDTO = this.getVotingSession() != null ? this.getVotingSession().mapToDTO() : null;
+        return new AgendaDTO(this.getId(), this.getName(), votingSessionDTO);
     }
 }

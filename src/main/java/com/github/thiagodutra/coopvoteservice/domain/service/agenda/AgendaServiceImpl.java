@@ -59,13 +59,14 @@ public class AgendaServiceImpl implements AgendaService {
         log.info("Creating agenda's voting session");
         log.debug(String.format("Creating voting session: %n Retrieving corresponding Agenda"));
         Optional<Agenda> agendaOptional = agendaRepository.findById(agendaId);
-        
         if (agendaOptional.isPresent()) {
-            log.debug(String.format("Found agenda. ID:%s, Name:%s", agendaOptional.get().getId().toString(), agendaOptional.get().getName()));
+            Agenda agenda = agendaOptional.get();
+            log.debug(String.format("Found agenda. ID:%s, Name:%s", agenda.getId().toString(), agenda.getName()));
             VotingSession votingSessionFromDto = votingSession.mapToEntity();
-            agendaOptional.get().setVotingSession(votingSessionFromDto);
+            votingSessionFromDto.setAlreadyProcessed(Boolean.FALSE);
+            agenda.setVotingSession(votingSessionFromDto);
             log.debug("Created relation between Agenda and Voting Session.");
-            return agendaRepository.save(agendaOptional.get()).mapToDTO();
+            return agendaRepository.save(agenda).mapToDTO();
         }
         log.error(String.format("Agenda with the given id: %s was not found.", agendaId.toString()));
         throw new NoSuchElementException(ApplicationMessages.AGENDA_DOES_NOT_EXISTS);

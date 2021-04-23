@@ -1,4 +1,4 @@
-package com.github.thiagodutra.coopvoteservice.api.controllers;
+package com.github.thiagodutra.coopvoteservice.controllers;
 
 import java.util.NoSuchElementException;
 

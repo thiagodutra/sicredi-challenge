@@ -1,8 +1,9 @@
 package com.github.thiagodutra.coopvoteservice.domain.dto;
 
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 
 import com.github.thiagodutra.coopvoteservice.domain.entities.Agenda;
 
@@ -18,7 +19,8 @@ public class AgendaDTO {
 
     private Long id;
     @NotBlank
-    @Size(max = 50)
+    @Min(3)
+    @Max(50)
     private String name;
     
     private VotingSessionDTO votingSession;
