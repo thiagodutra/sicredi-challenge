@@ -49,22 +49,30 @@ public class AgendaController {
                 HttpStatus.NOT_FOUND);
     }
 
-    @ApiOperation(value = "Method to retrieve All Agendas in Database", response = AgendaDTO.class)
+    @ApiOperation(value = "Method to retrieve All Agendas in Database", 
+        notes = "Use to retrieve all agendas",
+        response = AgendaDTO.class)
     @GetMapping("/agenda")
     public ResponseEntity<List<AgendaDTO>> getAllAgenda() {
         return ResponseEntity.ok(agendaService.getAllAgenda());
     }
-    @ApiOperation(value = "Method to retrieve one Agenda by its ID", response = AgendaDTO.class)
+    @ApiOperation(value = "Method to retrieve one Agenda by its ID", 
+        notes = "Provide an id to look up for an especific agenda",
+        response = AgendaDTO.class)
     @GetMapping("/agenda/{id}")
     public ResponseEntity<AgendaDTO> getAgendaById(@PathVariable @Min(1) Long id) {
         return ResponseEntity.ok(agendaService.getAgendaById(id).mapToDTO());
     }
-    @ApiOperation(value = "Method to create an Agenda", response = AgendaDTO.class)
+    @ApiOperation(value = "Method to create an Agenda", 
+        notes = "To create a new Agenda",
+        response = AgendaDTO.class)
     @PostMapping("/agenda")
     public ResponseEntity<AgendaDTO> createAgenda(@Valid @RequestBody final AgendaDTO agenda) {
         return ResponseEntity.ok(agendaService.createAgenda(agenda).mapToDTO());
     }
-    @ApiOperation(value = "Method to create a Voting Session related to one Agenda", response = AgendaDTO.class)
+    @ApiOperation(value = "Method to create a Voting Session related to one Agenda", 
+        notes = "Creates a voting session relationed to the given agenda id",
+        response = AgendaDTO.class)
     @PostMapping("/agenda/{agendaId}/create-session")
     public ResponseEntity<AgendaDTO> createSession(@PathVariable @Min(1) Long agendaId,
     @Valid @RequestBody VotingSessionDTO votingSession) {

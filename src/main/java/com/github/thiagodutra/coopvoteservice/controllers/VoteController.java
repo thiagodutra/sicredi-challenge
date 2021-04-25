@@ -47,7 +47,9 @@ public class VoteController {
                 HttpStatus.BAD_REQUEST);
     }
 
-    @ApiOperation(value = "Method to Vote in a VotingSession topic", response = VoteDTO.class)
+    @ApiOperation(value = "Method to Vote in a VotingSession topic", 
+        notes =  "Coputes a vote to a specific Voting Session, if its openned",
+        response = VoteDTO.class)
     @PostMapping("/vote/{sessionId}")
     public VoteDTO vote(@PathVariable Long sessionId, @RequestBody VoteDTO voteDto) throws Exception {
         return voteService.processVote(sessionId, voteDto).mapToDTO();

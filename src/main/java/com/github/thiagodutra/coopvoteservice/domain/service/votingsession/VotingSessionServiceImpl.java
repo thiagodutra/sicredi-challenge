@@ -24,7 +24,7 @@ public class VotingSessionServiceImpl implements VotingSessionService{
 
     @Override
     public VotingSession save(VotingSessionDTO votingSessionDTO) {
-        log.info("Sabing voting session.");
+        log.info("Saving voting session.");
         VotingSession votingSession = votingSessionDTO.mapToEntity();
         log.debug("Saving voting session: " + votingSession.toString());
         return votingSessionRepository.save(votingSession); 
@@ -34,7 +34,7 @@ public class VotingSessionServiceImpl implements VotingSessionService{
     public VotingSession findById(Long id){
         log.debug(String.format("Trying to retrieve VotingSession with ID:%s", id.toString()));
         return votingSessionRepository.findById(id)
-            .orElseThrow(() -> new NoSuchElementException(ApplicationMessages.AGENDA_DOES_NOT_EXISTS));     
+            .orElseThrow(() -> new NoSuchElementException(ApplicationMessages.VOTING_SESSION_DOES_NOT_EXISTS));     
     }
 
     @Override

@@ -33,12 +33,16 @@ public class SessionController {
                 new DefaultErrorResponse("VotingSession", "Cannot find the element with the given id", exception.getMessage()),
                 HttpStatus.NOT_FOUND);
     }
-    @ApiOperation(value = "Method to create a Voting Session in Database", response = VotingSessionDTO.class)
+    @ApiOperation(value = "Method to create a Voting Session in Database", 
+        notes = "To create a new voting session",
+        response = VotingSessionDTO.class)
     @PostMapping("/session")
     public ResponseEntity<VotingSessionDTO> create(@RequestBody VotingSessionDTO votingSessionDTO) {
         return ResponseEntity.ok(votingSessionService.save(votingSessionDTO).mapToDTO());
     }
-    @ApiOperation(value = "Method to retrieve a VotingSession in Database", response = VotingSessionDTO.class)
+    @ApiOperation(value = "Method to retrieve a VotingSession in Database", 
+        notes = "Provide an id to look up for an especific voting session",
+        response = VotingSessionDTO.class)
     @GetMapping("/session/{id}")
     public ResponseEntity<VotingSessionDTO> findById(@PathVariable Long votingSessionId) {
         return ResponseEntity.ok(votingSessionService.findById(votingSessionId).mapToDTO());

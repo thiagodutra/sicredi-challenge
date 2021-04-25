@@ -48,7 +48,7 @@ public class VotingSession {
         this.sessionName = sessionName;
         this.startingVoteTime = LocalDateTime.now();
         this.votingDurationInMinutes = votingDurationInMinutes == null ? DEFAULT_VOTING_DURATION : votingDurationInMinutes;
-        this.endingVoteTime = calculateEndingVotingTime(votingDurationInMinutes);
+        this.endingVoteTime = calculateEndingVotingTime(this.votingDurationInMinutes);
     }
 
     private LocalDateTime calculateEndingVotingTime(Long votingDurationInMinutes) {

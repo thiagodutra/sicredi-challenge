@@ -6,7 +6,7 @@ import com.github.thiagodutra.coopvoteservice.domain.entities.Vote;
 public interface VoteService {
     
 
-    Vote processVote(Long votingSessionId, VoteDTO voteDto) throws Exception;
+    Vote processVote(Long votingSessionId, VoteDTO voteDto);
 
 
 }

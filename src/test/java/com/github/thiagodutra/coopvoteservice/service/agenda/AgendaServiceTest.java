@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.NoSuchElementException;
@@ -42,16 +43,19 @@ public class AgendaServiceTest {
         Long randomId = new Random().nextLong();
         String agendaName = "Created Agenda";
         Agenda agendaEntity = new Agenda(randomId, agendaName, null);
-        
-        when(mockedAgendaRepository.save(any(Agenda.class))).thenReturn(agendaEntity);
+        AgendaDTO agendaDTO = new AgendaDTO(agendaEntity.getId(), agendaEntity.getName(),null);
 
-        AgendaDTO agendaDTO = mockedAgendaService.createAgenda(agendaEntity.mapToDTO());
+        when(mockedAgendaRepository.save(any())).thenReturn(agendaEntity);
+
+        Agenda agenda = mockedAgendaService.createAgenda(agendaDTO);
 
         assertAll("Should create an Agenda", 
-            () -> assertEquals(agendaName, agendaDTO.getName()),
-            () -> assertEquals(randomId, agendaDTO.getId()),
-            () -> assertNull(agendaDTO.getVotingSession())
+            () -> assertEquals(agendaName, agenda.getName()),
+            () -> assertEquals(randomId, agenda.getId()),
+            () -> assertNull(agenda.getVotingSession())
         );
+
+        verify(mockedAgendaRepository).save(any());
     }
 
     @Test
@@ -65,14 +69,14 @@ public class AgendaServiceTest {
         when(mockedAgendaRepository.findById(randomId)).thenReturn(Optional.of(agendaEntity));
         when(mockedAgendaRepository.save(agendaEntity)).thenReturn(agendaEntity);
 
-        AgendaDTO agendaDTO = mockedAgendaService.createVotingSession(randomId, votingSession);
+        Agenda agenda = mockedAgendaService.createVotingSession(randomId, votingSession);
 
         assertAll("Should create and add a VotingSession to an existing Agenda",
-            () -> assertEquals(agendaName, agendaDTO.getName()),
-            () -> assertEquals(randomId, agendaDTO.getId()),
-            () -> assertNotNull(agendaDTO.getVotingSession()),
-            () -> assertEquals(sessionName, agendaDTO.getVotingSession().getTopicName()),
-            () -> assertNotNull(agendaDTO.getVotingSession().getVotingDurationInMinutes())
+            () -> assertEquals(agendaName, agenda.getName()),
+            () -> assertEquals(randomId, agenda.getId()),
+            () -> assertNotNull(agenda.getVotingSession()),
+            () -> assertEquals(sessionName, agenda.getVotingSession().getSessionName()),
+            () -> assertNotNull(agenda.getVotingSession().getVotingDurationInMinutes())
             );
 
         assertAll ("Should verify VotingSessions attributes",
@@ -80,6 +84,9 @@ public class AgendaServiceTest {
                 .isEqual(agendaEntity.getVotingSession().getEndingVoteTime())),
             () -> assertTrue(agendaEntity.getVotingSession().getEndingVoteTime()
                 .isAfter(agendaEntity.getVotingSession().getStartingVoteTime().plusMinutes(14L))));
+
+        verify(mockedAgendaRepository).findById(randomId);
+        verify(mockedAgendaRepository).save(agendaEntity);
     }
     
     @Test
@@ -89,6 +96,8 @@ public class AgendaServiceTest {
         VotingSessionDTO votingSession = new VotingSessionDTO(randomId, sessionName, 15L);
         when(mockedAgendaRepository.findById(anyLong())).thenReturn(Optional.empty());
 
-        assertThrows(NoSuchElementException.class,  () -> mockedAgendaService.createVotingSession(10l, votingSession), ApplicationMessages.AGENDA_DOES_NOT_EXISTS);       
+        assertThrows(NoSuchElementException.class,  () -> mockedAgendaService.createVotingSession(10l, votingSession), ApplicationMessages.AGENDA_DOES_NOT_EXISTS);
+        
+        verify(mockedAgendaRepository).findById(10l);
     }
 }
