@@ -20,14 +20,6 @@ services:
     volumes:
       - mysql-db:/var/lib/mysql
   
-  adminer:
-    image: adminer
-    restart: always
-    ports:
-      - 8081:8080
-    networks:
-      - coop-vote-service-network
-  
   rabbitmq:
     image: rabbitmq:latest
     environment:
@@ -41,6 +33,20 @@ services:
       - coop-vote-service-network
     volumes:
       - rabbitmq-data:/var/lib/rabbitmq
+
+  coop-vote-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: tdutra/coopservice:latest
+    container_name: coop-vote-service
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysql
+      - rabbitmq
+    networks: 
+      - coop-vote-service-network
 
 networks:
   coop-vote-service-network:

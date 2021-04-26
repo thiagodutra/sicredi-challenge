@@ -72,11 +72,14 @@ public class ClosedSessionScanService {
     }
 
     private String calculateResult(List<Vote> votes){
+        log.info("Starting to count the YES votes");
         int voteYes = votes.stream().filter(vote -> vote.getVote().equalsIgnoreCase("yes"))
             .collect(Collectors.toList()).size();
         BigDecimal voteYesPercentage = BigDecimal.valueOf(voteYes)
-            .divide(BigDecimal.valueOf(votes.size()), 2, RoundingMode.UNNECESSARY);
+            .divide(BigDecimal.valueOf(votes.size()), 2, RoundingMode.HALF_UP);
+        log.info("Calculated the percentage of YES VOTES");
         int result = voteYesPercentage.compareTo(BigDecimal.valueOf(0.50));
+        log.info("Determining the results");
         if(result < 0) {
             return ApplicationMessages.RESULT_IS_NO;
         } else if (result > 0) {
