@@ -1,0 +1,52 @@
+version: '3.5'
+
+volumes:
+  mysql-db:
+  rabbitmq-data:
+
+services:
+  mysql:
+    image: mysql:latest
+    container_name: mysql-server-sicredi
+    environment:
+      MYSQL_DATABASE: 'sicredi'
+      MYSQL_USER: 'sicred1'
+      MYSQL_PASSWORD: 'vote@sicr3di'
+      MYSQL_ROOT_PASSWORD: 'vote@sicr3di'
+    ports:
+      - "3306:3306"
+    networks:
+      - coop-vote-service-network
+    volumes:
+      - mysql-db:/var/lib/mysql
+  
+  rabbitmq:
+    image: rabbitmq:latest
+    environment:
+      RABBITMQ_DEFAULT_USER: sicred1
+      RABBITMQ_DEFAULT_PASS: vote@sicr3di
+    container_name: rabbitmq-server
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks: 
+      - coop-vote-service-network
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+
+  coop-vote-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: tdutra/coopservice:latest
+    container_name: coop-vote-service
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysql
+      - rabbitmq
+    networks: 
+      - coop-vote-service-network
+
+networks:
+  coop-vote-service-network:
