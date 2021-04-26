@@ -19,14 +19,14 @@ Contabilizar os votos e dar o resultado da votação na pauta
 - `docker-compose up`
 
 # Utilizando o Postman
-Importe a collection que se encontra na pasta postman_collection
+- Importe a collection que se encontra na pasta postman_collection
 
-Siga a ordem:
+# Siga a ordem:
 Agenda:
   - Create Agenda
   - Create Voting Session
   `Utilize o id da agenda`
   
 Vote:
-  Do Vote
+  - Do Vote
   `Utilize o id da VotingSession.`
